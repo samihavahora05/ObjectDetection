@@ -43,18 +43,14 @@ A native Android app built entirely in Kotlin + Jetpack Compose, designed around
 <div align="center">
 <table>
   <tr>
-    <td align="center"><b>🏠 Home</b></td>
-    <td align="center"><b>🎯 Detection HUD</b></td>
-    <td align="center"><b>📊 Stats</b></td>
-  </tr>
-  <tr>
-    <td><img src="screenshots/home_mockup.png" width="220"/></td>
-    <td><img src="screenshots/detection_mockup.png" width="220"/></td>
-    <td><img src="screenshots/stats_mockup.png" width="220"/></td>
+    <td><img src="screenshots/screen_1.png" width="220"/></td>
+    <td><img src="screenshots/screen_2.png" width="220"/></td>
+    <td><img src="screenshots/screen_3.png" width="220"/></td>
   </tr>
 </table>
 
-
+<sub>Real captures from the app demo.</sub>
+</div>
 
 ---
 
