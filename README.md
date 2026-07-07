@@ -54,8 +54,7 @@ A native Android app built entirely in Kotlin + Jetpack Compose, designed around
   </tr>
 </table>
 
-<sub>⚠️ These are illustrative design mockups matching the app's actual layout and color palette — not live device screenshots. Swap these out with real captures from a build once available.</sub>
-</div>
+
 
 ---
 
@@ -148,13 +147,6 @@ To enable live inference:
 - 💾 Persist detection logs locally (Room database)
 - 📤 Export detection history as CSV/JSON
 
----
-
-## 📄 License
-
-No license file is currently included in this repository. Add one (MIT, Apache 2.0, etc.) if you intend for others to reuse this code.
-
----
 
 <div align="center">
 
