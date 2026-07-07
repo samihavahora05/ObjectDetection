@@ -5,15 +5,14 @@
 <img src="https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white"/>
 <img src="https://img.shields.io/badge/Camera-CameraX-FF6F00?style=for-the-badge"/>
 <img src="https://img.shields.io/badge/Model-YOLOv8%20%2F%20TFLite-8E24AA?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge"/>
 
 <br/><br/>
 
-# 🎯 Object Detection System
+# 🎯 ObjectVision
 
-### *A real-time, on-device object detection app with a sci-fi neural-scan interface.*
+### *A real-time, on-device object & product scanner with a sci-fi neural-scan interface.*
 
-A native Android app built entirely in Kotlin + Jetpack Compose, designed around a live camera feed with an animated HUD (heads-up display) overlay — scanning brackets, a perspective grid, a laser scan line, and live bounding boxes — built to visualize on-device object detection powered by **YOLOv8** through **TensorFlow Lite**.
+A native Android app built in Kotlin + Jetpack Compose. It combines a live-camera **object detection HUD** (scanning brackets, perspective grid, laser scan line, live bounding boxes) with an **AI product scanner** — point the camera at a packaged food item and get back its ingredients, nutrition facts, allergen warnings, and a health score.
 
 <br/>
 
@@ -27,13 +26,15 @@ A native Android app built entirely in Kotlin + Jetpack Compose, designed around
 
 | Feature | Description |
 |---|---|
-| 📷 **Live Camera Feed** | Full-screen CameraX preview as the base layer for real-time analysis |
-| 🎯 **Detection HUD Overlay** | Animated perspective grid, corner scan brackets, and a sweeping laser line drawn with Compose `Canvas` |
-| 🟩 **Live Bounding Boxes** | Detected objects are outlined in real time directly over the camera feed |
-| 📊 **Stats Dashboard** | Inference speed, average confidence, model size, and session counters |
+| 📷 **Live Camera Feed** | Full-screen CameraX preview with an animated sci-fi HUD (perspective grid, corner scan brackets, sweeping laser line) |
+| 🟩 **General Object Detection** | Detects everyday objects (person, laptop, phone, backpack, etc.) with live bounding boxes and confidence scores |
+| 🥫 **AI Product & Ingredient Analysis** | Point the camera at a packaged food product to identify it and pull up a full nutrition breakdown |
+| 🍬 **Ingredients Composition** | Visual donut chart breaking down the product's ingredients by percentage |
+| ⚠️ **Allergen Information** | Flags allergens like legumes, peanuts, and gluten |
+| 🥗 **Health Score & Diet Flags** | Health index (e.g. "LOW" processing level), a 0–10 health score, and Vegetarian/Vegan indicators |
+| 📊 **Stats Dashboard** | Detection precision rate, inference speed, and session counters |
 | 🕓 **Detection Logs** | Searchable history of past detections with timestamps and confidence scores |
-| ⚙️ **Configurable Engine** | Toggle high-precision mode, offline-only processing, vibration/battery preferences |
-| ℹ️ **About the Model** | In-app screen explaining the detection model and how it works |
+| ⚙️ **Configurable Engine** | Toggle high-precision mode, offline-only processing, haptic feedback, and battery optimization |
 | 🌑 **Dark, HUD-Style UI** | Consistent deep-space theme (`#020408` background, `#007BFF` neon-blue accent) across every screen |
 
 ---
@@ -43,13 +44,32 @@ A native Android app built entirely in Kotlin + Jetpack Compose, designed around
 <div align="center">
 <table>
   <tr>
-    <td><img src="screenshots/screen_1.png" width="220"/></td>
-    <td><img src="screenshots/screen_2.png" width="220"/></td>
-    <td><img src="screenshots/screen_3.png" width="220"/></td>
+    <td align="center"><b>Splash</b></td>
+    <td align="center"><b>Home</b></td>
+    <td align="center"><b>Detection Logs</b></td>
+    <td align="center"><b>Settings</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/01_splash.png" width="180"/></td>
+    <td><img src="screenshots/02_home.png" width="180"/></td>
+    <td><img src="screenshots/03_detection_logs.png" width="180"/></td>
+    <td><img src="screenshots/04_settings.png" width="180"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Live Scan</b></td>
+    <td align="center"><b>Product Analysis</b></td>
+    <td align="center"><b>Ingredients Breakdown</b></td>
+    <td align="center"><b>Nutrition & Allergens</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/05_live_scan.png" width="180"/></td>
+    <td><img src="screenshots/06_product_analysis.png" width="180"/></td>
+    <td><img src="screenshots/07_ingredients_composition.png" width="180"/></td>
+    <td><img src="screenshots/08_nutrition_allergens.png" width="180"/></td>
   </tr>
 </table>
 
-<sub>Real captures from the app demo.</sub>
+<sub>Real captures from the app demo — scanning a Balaji Wafers Mung Dal packet end-to-end.</sub>
 </div>
 
 ---
@@ -73,12 +93,13 @@ app/src/main/java/com/example/objectdetection_system/
 ├── NavGraph.kt                  # Navigation graph wiring all screens together
 ├── ui/theme/                    # Color.kt, Type.kt, Theme.kt — app-wide Material theme
 └── ui/screens/
-    ├── SplashScreen.kt          # Animated boot/loading sequence
-    ├── HomeScreen.kt            # Dashboard, quick stats, recent activity, start button
+    ├── SplashScreen.kt          # Animated "ObjectVision" boot/loading sequence
+    ├── HomeScreen.kt            # Dashboard, detection precision rate, start button
     ├── DetectionScreen.kt       # Live camera feed + HUD overlay + bounding boxes
+    ├── ProductAnalysisScreen.kt # Ingredients, nutrition facts, allergens, health score
     ├── StatsScreen.kt           # Inference speed, confidence, model size, session count
     ├── LogsScreen.kt            # Searchable detection history
-    ├── SettingsScreen.kt        # Precision mode, offline processing, vibration, battery
+    ├── SettingsScreen.kt        # Precision mode, offline processing, haptics, battery
     └── AboutModelScreen.kt      # Explains the underlying detection model
 ```
 
@@ -93,14 +114,16 @@ ImageAnalysis.Analyzer (ObjectDetectorAnalyzer)
         ↓
 TensorFlow Lite Interpreter  →  YOLOv8 model (.tflite)
         ↓
-Bounding Box list (List<Rect>)
-        ↓
-Compose State (mutableStateOf)
-        ↓
-Canvas overlay — draws HUD grid, scan brackets, and live boxes
+  ┌─────────────────────┴─────────────────────┐
+  ↓                                           ↓
+Bounding Box list (List<Rect>)      Packaged-product match
+  ↓                                           ↓
+Compose State (mutableStateOf)      Nutrition/ingredients lookup
+  ↓                                           ↓
+Canvas overlay (HUD, boxes)         Product Analysis screen
 ```
 
-The `DetectionScreen` already wires up the **CameraX → Analyzer → Compose Canvas** pipeline end-to-end. The `ObjectDetectorAnalyzer` class is scaffolded with the exact steps needed to plug in a `.tflite` model — converting each camera frame, running inference, parsing YOLOv8 output into bounding boxes, and filtering by confidence — ready for the model integration step.
+The `DetectionScreen` wires up the **CameraX → Analyzer → Compose Canvas** pipeline end-to-end for general object detection. For packaged products, a detected item is matched against a product database to surface ingredients, nutrition facts, allergens, and a health score on the **Product Analysis** screen. The `ObjectDetectorAnalyzer` class is scaffolded with the exact steps needed to plug in a `.tflite` model — converting each camera frame, running inference, parsing YOLOv8 output into bounding boxes, and filtering by confidence.
 
 ---
 
@@ -140,9 +163,9 @@ To enable live inference:
 - 🧠 Wire up the TensorFlow Lite interpreter and a trained YOLOv8 `.tflite` model
 - 🎚️ Live confidence-threshold slider in Settings
 - 🏷️ Class labels rendered alongside each bounding box
+- 🥫 Expand the packaged-product database beyond the current demo item
 - 💾 Persist detection logs locally (Room database)
 - 📤 Export detection history as CSV/JSON
-
 
 <div align="center">
 
